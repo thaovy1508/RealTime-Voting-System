@@ -1,14 +1,20 @@
 # Real Time Election Voting System
-This repository is part of our group project for DS5110. We have chosen to develop a scalable, real-time voting system using big data technologies.
+This repository is part of our group project for DS5110. We have chosen to develop a scalable, real-time voting system using big data technologies. We'll incorporate technologies like Docker, Kafka, PostgreSQL, Python, Apache Spark, and Streamlit to build a robust, scalable, live-updating voting platform.
 
 ## System Architecture
-
+(need a diagram)
  The system processes votes in real-time using **Apache Kafka, Spark for processing, and Streamlit for visualization**.
 
 ## Database Schema
+(need a diagram)
+Candidate: contains candidates information (candidate_id, name, age, dob, gender, first_name, last_name, party, image_url, is_active)
+Voter: contains voters information (voter_id, name, age, dob, gender, state, email, phone)
+Vote: contains vote information (vote_id, voter_id, candidate_id, voted_at)
 
 ## API
 Voters information are gotton from Random User API: https://randomuser.me/
+(short explanations how to use this API)
+
 ## Project Overview
 
 The project consists of three main components:
