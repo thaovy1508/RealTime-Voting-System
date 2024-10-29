@@ -8,7 +8,7 @@ This repository is part of our group project for DS5110. We have chosen to devel
 ## Database Schema
 
 ## API
-
+Voters information are gotton from Random User API: https://randomuser.me/
 ## Project Overview
 
 The project consists of three main components:
