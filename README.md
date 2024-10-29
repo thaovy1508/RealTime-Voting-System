@@ -45,7 +45,6 @@ Voting-Dashboard/
 ├── src/
 │   ├── dashboard.py      # Streamlit dashboard
 ├── docker-compose.yml
-├── postgresql-42.2.28.jre7.jar
 ├── requirements.txt
 └── README.md
 ```
