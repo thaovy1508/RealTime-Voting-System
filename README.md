@@ -7,13 +7,13 @@ This repository is part of our group project for DS5110. We have chosen to devel
 
 ## Database Schema
 
-### API
+## API
 
 ## Project Overview
 
 The project consists of three main components:
 
-### Features
+## Features
 - 🗳️ Real-time vote counting and visualization
 - 🗺️ Interactive US map showing state-by-state results
 - 📈 Time series vote tracking
@@ -51,7 +51,7 @@ Voting-Dashboard/
 ## Getting Started (Using Docker)
 
 
-### Component Descriptions
+## Component Descriptions
 
 
 
