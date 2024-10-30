@@ -13,8 +13,29 @@ This repository is part of our group project for DS5110. We have chosen to devel
 
 ## API
 Voters information are gotton from Random User API: https://randomuser.me/
-(short explanations how to use this API)
 
+```bash Example
+import requests
+
+# Basic request - gets one random user
+response = requests.get('https://randomuser.me/api/')
+user = response.json()
+
+# Get multiple users (e.g., 5 users)
+response = requests.get('https://randomuser.me/api/?results=5')
+users = response.json()
+
+# Get specific fields and nationalities
+response = requests.get('https://randomuser.me/api/?nat=us,gb&results=3&gender=female')
+# This gets 3 female users from US or GB
+
+# Example of accessing the data
+for user in users['results']:
+    print(f"Name: {user['name']['first']} {user['name']['last']}")
+    print(f"Email: {user['email']}")
+    print(f"Location: {user['location']['city']}, {user['location']['country']}")
+    print("---")
+```
 ## Project Overview
 
 The project consists of three main components:
