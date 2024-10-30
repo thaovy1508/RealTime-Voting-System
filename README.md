@@ -1,5 +1,5 @@
 # Real Time Election Voting System
-This repository is part of our group project for DS5110. We have chosen to develop a scalable, real-time voting system using big data technologies. We'll incorporate technologies like **Docker, Kafka, PostgreSQL, Python, Apache Spark, and Streamlit** to build a robust, scalable, live-updating voting platform.
+This repository is part of our group project for DS5110. We have chosen to develop a scalable, real-time voting system using big data technologies. We'll incorporate technologies like **Docker, Kafka, PostgreSQL, Python, Apache Spark, and Streamlit** to build a robust, scalable, live-updating voting platform. The system uses Docker Compose to quickly set up the needed services in Docker containers.
 
 ## System Architecture
 (need a diagram)
