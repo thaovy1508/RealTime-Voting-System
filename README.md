@@ -3,13 +3,13 @@ This repository is part of our group project for DS5110. We have chosen to devel
 
 ## System Architecture
 ![System_Architecture](images/system_architecture.png)
-- The system processes votes in real-time using **Apache Kafka, Spark for processing, and Streamlit for visualization**.
+- The system processes votes in real-time using **PostgreSQL for storage**, **Apache Kafka, Spark for processing, and Streamlit for visualization**.
 
 ## Database Schema
 ![Database_Design](images/database_design.png)
-- Candidate: contains candidates information (candidate_id, name, age, dob, gender, first_name, last_name, party, image_url, is_active)
-- Voter: contains voters information (voter_id, name, age, dob, gender, state, email, phone)
-- Vote: contains vote information (vote_id, voter_id, candidate_id, voted_at)
+- **Candidate**: contains candidates information (**candidate_id**, dob, age, gender, first_name, last_name, biography, party, image_url)
+- **Voter**: contains voters information (**voter_id**, dob, age, gender,registration_number, first_name, last_name, nationality, address, email, phone)
+- **Vote**: contains vote information (**vote_id**, voter_id, candidate_id, voted_at)
 
 ## API
 Voters information are gotton from Random User API: https://randomuser.me/
@@ -68,6 +68,7 @@ The project consists of three main components:
 ```bash
 Voting-Dashboard/
 ├── docs/
+├── images/
 ├── lib/
 ├── src/
 │   ├── dashboard.py      # Streamlit dashboard
