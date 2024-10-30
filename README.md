@@ -63,6 +63,8 @@ The project consists of three main components:
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Python 3.9+](https://www.python.org/downloads/) (for local development)
 - [Git](https://git-scm.com/downloads)
+- [Anaconda](https://www.anaconda.com/download) (for virtual environment)
+- [PostgreSQL](https://www.postgresql.org/download/)
 
 ## Project Structure
 ```bash
@@ -76,7 +78,75 @@ Voting-Dashboard/
 ├── requirements.txt
 └── README.md
 ```
-## Getting Started (Using Docker)
+## Getting Started (Using Docker & Anaconda)
+**1. Setting up Environment file**
+- Open Anaconda Prompt
+- Navidate to your project directory
+```bash
+# Create the environment from the file
+conda env create -f environment.yml
+
+# Activate the environment
+conda activate voting-system
+
+# To deactivate an active environment, use
+conda deactivate
+```
+- If you need to update the environment later
+```bash
+# After adding new packages to environment.yml
+conda env update -f environment.yml --prune
+```
+
+**2. Setting up Docker Service**
+- Make sure Docker Desktop is running first (you need to start Docker Desktop application)
+- Open Anaconda Prompt and navigate to your project directory
+```bash
+# Start all services
+docker-compose up -d
+
+# Create topics
+docker exec -it voting_kafka kafka-topics --create --bootstrap-server localhost:9092 --topic voters_topic --partitions 1 --replication-factor 1
+
+docker exec -it voting_kafka kafka-topics --create --bootstrap-server localhost:9092 --topic candidates_topic --partitions 1 --replication-factor 1
+
+docker exec -it voting_kafka kafka-topics --create --bootstrap-server localhost:9092 --topic votes_topic --partitions 1 --replication-factor 1
+
+docker exec -it voting_kafka kafka-topics --create --bootstrap-server localhost:9092 --topic aggregated_votes_per_candidate --partitions 1 --replication-factor 1
+
+docker exec -it voting_kafka kafka-topics --create --bootstrap-server localhost:9092 --topic aggregated_turnout_by_location --partitions 1 --replication-factor 1
+
+# Verify topics were created
+docker exec -it voting_kafka kafka-topics --list --bootstrap-server localhost:9092
+
+# To stop services 
+docker-compose down
+
+# To restart services
+docker-compose restart
+
+# Remove everything including volumes (clean start)
+docker-compose down -v
+
+```
+
+**3.Verify PostgreSQL**
+```bash
+# Connect to PostgreSQL
+docker exec -it voting_postgres psql -U postgres -d voting
+
+# You should see the PostgreSQL prompt: voting=#
+# Type \q to exit
+
+# Restart PostgreSQL if needed
+docker-compose restart postgres
+
+# Check PostgreSQL logs
+docker log voting_postgres
+
+```
+
+
 
 
 ## Component Descriptions
