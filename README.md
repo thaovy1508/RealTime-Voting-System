@@ -6,7 +6,7 @@ This repository is part of our group project for DS5110. We have chosen to devel
 - The system processes votes in real-time using **Apache Kafka, Spark for processing, and Streamlit for visualization**.
 
 ## Database Schema
-![Database_Design](images/system_architecture.png)
+![Database_Design](images/database_design.png)
 - Candidate: contains candidates information (candidate_id, name, age, dob, gender, first_name, last_name, party, image_url, is_active)
 - Voter: contains voters information (voter_id, name, age, dob, gender, state, email, phone)
 - Vote: contains vote information (vote_id, voter_id, candidate_id, voted_at)
