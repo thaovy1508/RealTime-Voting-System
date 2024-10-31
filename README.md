@@ -130,7 +130,7 @@ docker-compose down -v
 
 ```
 
-**3.Verify PostgreSQL**
+**3. Verify PostgreSQL**
 ```bash
 # Connect to PostgreSQL
 docker exec -it voting_postgres psql -U postgres -d voting
@@ -145,9 +145,15 @@ docker-compose restart postgres
 docker log voting_postgres
 
 ```
+**4. Set up database**
+```bash
+# Make sure your conda environment is activated
+conda activate voting-system
 
+# Run the setup script
+python src/setup_database.py
 
-
+```
 
 ## Component Descriptions
 
