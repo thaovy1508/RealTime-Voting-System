@@ -185,6 +185,48 @@ Database Operations
 - Transaction management
 - Database migration capabilities
 
+```bash
+CREATE TABLE candidate (
+                candidate_id VARCHAR(255) PRIMARY KEY,
+                first_name VARCHAR(255) NOT NULL,
+                last_name VARCHAR(255) NOT NULL,
+                dob VARCHAR(225) NOT NULL,
+                age INTEGER,
+                gender VARCHAR(10) NOT NULL,
+                party VARCHAR(255) NOT NULL,
+                biography TEXT,
+                img_url TEXT
+            )
+
+            CREATE TABLE voter (
+                voter_id VARCHAR(255) PRIMARY KEY,
+                first_name VARCHAR(255) NOT NULL,
+                last_name VARCHAR(255) NOT NULL,
+                dob VARCHAR(225) NOT NULL,
+                age INTEGER,
+                gender VARCHAR(10) NOT NULL,
+                nationality VARCHAR(100),
+                registration_number VARCHAR(255) UNIQUE,
+                address_street VARCHAR(255),
+                address_city VARCHAR(255),
+                address_state VARCHAR(255),
+                address_country VARCHAR(255),
+                address_postcode VARCHAR(255),
+                email VARCHAR(255),
+                phone VARCHAR(100)
+            )
+
+            CREATE TABLE vote (
+                vote_id VARCHAR(255) PRIMARY KEY,
+                voter_id VARCHAR(255) NOT NULL,
+                candidate_id VARCHAR(255) NOT NULL,
+                voted_at TIMESTAMP NOT NULL,
+                vote INTEGER,
+                FOREIGN KEY (voter_id) REFERENCES voter(voter_id),
+                FOREIGN KEY (candidate_id) REFERENCES candidate(candidate_id),
+                CONSTRAINT unique_voter UNIQUE (voter_id)
+            )
+```
 ### **2. data_generator.py**
 This fill will generate data from RandomUser API as voting simulator, and inserted the data to the database accordingly.
 
