@@ -175,15 +175,15 @@ This file will connect to PostgreSQL database, create "vote", "voter", "candidat
 **Key Features:**
 
 Schema Management
-    - Table creation for voter, candidate, and vote tables
-    - Index creation for performance optimization
-    - Foreign key constraints for data integrity
-    - Data type validation
+- Table creation for voter, candidate, and vote tables
+- Index creation for performance optimization
+- Foreign key constraints for data integrity
+- Data type validation
 
 Database Operations
-    - CRUD operations setup
-    - Transaction management
-    - Database migration capabilities
+- CRUD operations setup
+- Transaction management
+- Database migration capabilities
 
 ### **2. data_generator.py**
 This fill will generate data from RandomUser API as voting simulator, and inserted the data to the database accordingly.
@@ -191,14 +191,14 @@ This fill will generate data from RandomUser API as voting simulator, and insert
 **Key Features:**
 
 Data Generation
-    - Voter data generation
-    - Candidate profile creation
-    - Voting pattern simulation
-    - Time-based vote distribution
+- Voter data generation
+- Candidate profile creation
+- Voting pattern simulation
+- Time-based vote distribution
 
 Kafka Integration
-    - Message production to Kafka topics
-    - Message serialization and deserialization
-    - Delivery confirmation handling
+- Message production to Kafka topics
+- Message serialization and deserialization
+- Delivery confirmation handling
 
 ## Dashboard Components
