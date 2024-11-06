@@ -169,8 +169,8 @@ python src/data_generator.py
 **7. Run Streamlit Dashboard**
 
 ## Component Descriptions
-###**1.setup_database.py**
-    - This file will connect to PostgreSQL database, create "vote", "voter", "candidate" databases.
+### **1.setup_database.py**
+This file will connect to PostgreSQL database, create "vote", "voter", "candidate" databases.
 
 **Key Features:**
     Schema Management
@@ -184,8 +184,8 @@ python src/data_generator.py
     - Transaction management
     - Database migration capabilities
 
-###**2. data_generator.py**
-    - This fill will generate data from RandomUser API as voting simulator, and inserted the data to the database accordingly.
+### **2. data_generator.py**
+This fill will generate data from RandomUser API as voting simulator, and inserted the data to the database accordingly.
 
 **Key Features:**
     Data Generation
