@@ -243,4 +243,10 @@ Kafka Integration
 - Message serialization and deserialization
 - Delivery confirmation handling
 
+```
+SELECT * FROM CANDIDATE;
+```
+![Candidate_DB](images/candidate_db.png)
+
+
 ## Dashboard Components
