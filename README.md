@@ -169,7 +169,7 @@ python src/data_generator.py
 **7. Run Streamlit Dashboard**
 
 ## Component Descriptions
-### **1.setup_database.py**
+### **1. setup_database.py**
 This file connects to the PostgreSQL database and creates the 'vote', 'voter', and 'candidate' databases.
 
 **Key Features:**
@@ -258,4 +258,7 @@ SELECT * FROM VOTE;
 ```
 ![Vote_DB](images/vote_db.png)
 
+### **3. analytics.py**
+
+### **4. dashboard.py**
 ## Dashboard Components
