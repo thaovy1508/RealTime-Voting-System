@@ -170,7 +170,7 @@ python src/data_generator.py
 
 ## Component Descriptions
 ### **1.setup_database.py**
-This file will connect to PostgreSQL database, create "vote", "voter", "candidate" databases.
+This file connects to the PostgreSQL database and creates the 'vote', 'voter', and 'candidate' databases.
 
 **Key Features:**
 
@@ -228,7 +228,7 @@ CREATE TABLE candidate (
             )
 ```
 ### **2. data_generator.py**
-This fill will generate data from RandomUser API as voting simulator, and inserted the data to the database accordingly.
+This file generates data from RandomUser API as voting simulator, and inserts the data to the database accordingly.
 
 **Key Features:**
 
@@ -248,5 +248,14 @@ SELECT * FROM CANDIDATE;
 ```
 ![Candidate_DB](images/candidate_db.png)
 
+```
+SELECT * FROM VOTER;
+```
+![Voter_DB](images/voter_db.png)
+
+```
+SELECT * FROM VOTE;
+```
+![Vote_DB](images/vote_db.png)
 
 ## Dashboard Components
