@@ -61,7 +61,7 @@ networks:
       - "6066:6066"  # Client input port
       - "7077:7077"  # Cluster manager communication port
 
-spark-worker:
+ spark-worker:
     image: bitnami/spark:latest
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     container_name: spark-worker
