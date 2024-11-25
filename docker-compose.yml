@@ -45,23 +45,18 @@ services:
     networks:
       - voting_network
 
-volumes:
-  postgres_data:
-
-networks:
-  voting_network:
-    driver: bridge
-
- spark-master:
+spark-master:
     image: bitnami/spark:latest
     command: bin/spark-class org.apache.spark.deploy.master.Master
     container_name: spark-master
     ports:
-      - "8081:8080"  # UI
-      - "6066:6066"  # Client input port
-      - "7077:7077"  # Cluster manager communication port
+      - "8081:8080"  # Web UI
+      - "6066:6066"  # REST Client Port
+      - "7077:7077"  # Worker Communication Port
+    networks:
+      - voting_network
 
- spark-worker:
+  spark-worker:
     image: bitnami/spark:latest
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     container_name: spark-worker
@@ -69,8 +64,17 @@ networks:
       - spark-master
     environment:
       SPARK_MODE: worker
-      SPARK_WORKER_CORES: 4         
-      SPARK_WORKER_MEMORY: 2g      
+      SPARK_WORKER_CORES: 4
+      SPARK_WORKER_MEMORY: 2g
       SPARK_MASTER_URL: spark://spark-master:7077
     ports:
-      - "8082:8081"  # UI
+      - "8082:8081"  # Web UI
+    networks:
+      - voting_network
+
+volumes:
+  postgres_data:
+
+networks:
+  voting_network:
+    driver: bridge
