@@ -4,7 +4,7 @@ from pyspark.sql.functions import sum as _sum
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
 
 import pyspark
-
+#hi
 print(pyspark.__version__) # to check the version of pyspark
 
 if __name__ == "__main__":
