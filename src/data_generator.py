@@ -9,7 +9,7 @@ import uuid
 
 class ContinuousVoteSimulator:
     BASE_URL = 'https://randomuser.me/api/?nat=us'
-    PARTIES = ["Management Party", "Savior Party", "High Tech Republic"]
+    PARTIES = ["Management Party", "Liberation Party", "United Republic Party"]
 
     def __init__(self):
         # Database connection
