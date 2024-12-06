@@ -149,6 +149,22 @@ def get_gender_division():
     conn.close()
     return df
 
+def get_votes_by_state():
+    conn = connect_to_db()
+    query = """
+    SELECT 
+        v.address_state, 
+        COUNT(*) as vote_count,
+        string_agg(DISTINCT c.party, ', ') as party
+    FROM vote vt
+    JOIN voter v ON vt.voter_id = v.voter_id
+    JOIN candidate c ON vt.candidate_id = c.candidate_id
+    GROUP BY v.address_state
+    """
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return df
+
 def main():
     st.title('🗳️ Real-time Voting Dashboard')
     st.write("Live voting results updated every 5 seconds")
@@ -248,15 +264,11 @@ def main():
     st.altair_chart(trends_chart, use_container_width=True)
 
     st.subheader('Vote Distribution by State')
-    votes_by_state = get_active_locations()
+    votes_by_state_df = get_votes_by_state()  # Use the function that returns DataFrame
     
-    # Load US states shapefile
     us_states = gpd.read_file('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
+    merged_data = us_states.merge(votes_by_state_df, left_on='name', right_on='address_state', how='left')
     
-    # Merge votes data with US states shapefile
-    merged_data = us_states.merge(votes_by_state, left_on='name', right_on='address_state', how='left')
-    
-    # Create choropleth map
     fig = px.choropleth(merged_data, 
                         geojson=merged_data.geometry, 
                         locations=merged_data.index, 
