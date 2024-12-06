@@ -261,7 +261,7 @@ class ContinuousVoteSimulator:
 
     
 
-    def simulate_continuously(self, voter_interval=2.0, stats_interval=10):
+    def simulate_continuously(self, voter_interval=0.5, stats_interval=10):
         """Run continuous simulation of voter registration and voting"""
         print("Starting continuous simulation...")
         print(f"- Generating new voter every {voter_interval} seconds")
@@ -316,7 +316,7 @@ if __name__ == "__main__":
     
     try:
         # Start continuous simulation
-        simulator.simulate_continuously(voter_interval=2.0, stats_interval=10)
+        simulator.simulate_continuously(voter_interval=0.5, stats_interval=10)
         
     except Exception as e:
         print(f"Error during simulation: {e}")

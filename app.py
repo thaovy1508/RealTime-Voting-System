@@ -14,8 +14,8 @@ st.set_page_config(
     layout="wide"
 )
 
-# Auto refresh every 5 seconds
-st_autorefresh(interval=5000, limit=None, key="refresh")
+# Auto refresh every 30 seconds
+st_autorefresh(interval=30000, limit=None, key="refresh")
 
 # Define consistent colors for parties/candidates
 PARTY_COLORS = {
@@ -165,9 +165,82 @@ def get_votes_by_state():
     conn.close()
     return df
 
+def get_leading_candidate_by_state():
+    conn = connect_to_db()
+    query = """
+    WITH state_party_votes AS (
+        SELECT 
+            v.address_state,
+            c.party,
+            COUNT(*) as party_votes,
+            RANK() OVER (PARTITION BY v.address_state ORDER BY COUNT(*) DESC) as rank
+        FROM vote vt
+        JOIN voter v ON vt.voter_id = v.voter_id
+        JOIN candidate c ON vt.candidate_id = c.candidate_id
+        GROUP BY v.address_state, c.party
+    )
+    SELECT 
+        address_state,
+        party,
+        party_votes
+    FROM state_party_votes
+    WHERE rank = 1
+    """
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return df
+
+def get_age_distribution():
+    conn = connect_to_db()
+    query = """
+    SELECT 
+        CASE 
+            WHEN age < 30 THEN '18-29'
+            WHEN age < 45 THEN '30-44'
+            WHEN age < 60 THEN '45-59'
+            ELSE '60+'
+        END as age_group,
+        COUNT(*) as count,
+        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) as percentage
+    FROM vote vt
+    JOIN voter v ON vt.voter_id = v.voter_id
+    GROUP BY 
+        CASE 
+            WHEN age < 30 THEN '18-29'
+            WHEN age < 45 THEN '30-44'
+            WHEN age < 60 THEN '45-59'
+            ELSE '60+'
+        END
+    ORDER BY age_group;
+    """
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return df
+
+def get_state_details():
+    conn = connect_to_db()
+    query = """
+    SELECT 
+        v.address_state,
+        c.party,
+        COUNT(*) as vote_count,
+        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY v.address_state), 2) as percentage,
+        COUNT(DISTINCT vt.voter_id) as total_voters,
+        ROUND(AVG(v.age), 1) as avg_age,
+        COUNT(CASE WHEN v.gender = 'male' THEN 1 END) * 100.0 / COUNT(*) as male_percentage
+    FROM vote vt
+    JOIN voter v ON vt.voter_id = v.voter_id
+    JOIN candidate c ON vt.candidate_id = c.candidate_id
+    GROUP BY v.address_state, c.party
+    ORDER BY v.address_state, vote_count DESC;
+    """
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return df
+
 def main():
     st.title('🗳️ Real-time Voting Dashboard')
-    st.write("Live voting results updated every 5 seconds")
+    st.write("Live voting results updated every 30 seconds")
 
     # Top metrics row
     col1, col2, col3, col4 = st.columns(4)
@@ -263,23 +336,55 @@ def main():
     
     st.altair_chart(trends_chart, use_container_width=True)
 
+    st.markdown("---")  # Add divider
     st.subheader('Vote Distribution by State')
-    votes_by_state_df = get_votes_by_state()  # Use the function that returns DataFrame
     
-    us_states = gpd.read_file('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
-    merged_data = us_states.merge(votes_by_state_df, left_on='name', right_on='address_state', how='left')
-    
-    fig = px.choropleth(merged_data, 
-                        geojson=merged_data.geometry, 
-                        locations=merged_data.index, 
-                        color='vote_count',
-                        color_continuous_scale="Viridis",
-                        hover_name="name",
-                        hover_data=["party", "vote_count"])
+    # Create two columns for maps
+    map_col1, map_col2 = st.columns(2, gap="medium")
 
-    fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(height=600, margin={"r":0,"t":0,"l":0,"b":0})
-    st.plotly_chart(fig, use_container_width=True)
+    with map_col1:
+        st.write("Total Votes by State")
+        votes_by_state_df = get_votes_by_state()
+        
+        us_states = gpd.read_file('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
+        merged_data = us_states.merge(votes_by_state_df, left_on='name', right_on='address_state', how='left')
+        
+        fig1 = px.choropleth(merged_data, 
+                          geojson=merged_data.geometry, 
+                          locations=merged_data.index, 
+                          color='vote_count',
+                          color_continuous_scale="Viridis",
+                          hover_name="name",
+                          hover_data=["party", "vote_count"])
+
+        fig1.update_geos(fitbounds="locations", visible=False)
+        fig1.update_layout(height=600,  # Increased from 400 to 600
+                          margin={"r":0,"t":0,"l":0,"b":0},
+                          width=800)  # Added width
+        st.plotly_chart(fig1, use_container_width=True)
+
+    with map_col2:
+        st.write("Leading Party by State")
+        leading_party_df = get_leading_candidate_by_state()
+        
+        merged_party_data = us_states.merge(leading_party_df, 
+                                          left_on='name', 
+                                          right_on='address_state', 
+                                          how='left')
+        
+        fig2 = px.choropleth(merged_party_data, 
+                          geojson=merged_party_data.geometry, 
+                          locations=merged_party_data.index, 
+                          color='party',
+                          color_discrete_map=PARTY_COLORS,
+                          hover_name="name",
+                          hover_data=["party", "party_votes"])
+
+        fig2.update_geos(fitbounds="locations", visible=False)
+        fig2.update_layout(height=600,  # Increased from 400 to 600
+                          margin={"r":0,"t":0,"l":0,"b":0},
+                          width=800)  # Added width
+        st.plotly_chart(fig2, use_container_width=True)
 
     # Gender division of voters
     st.subheader('Gender Division of Voters')
@@ -288,6 +393,66 @@ def main():
     fig = px.pie(gender_data, values='percentage', names='gender', title='Gender Division of Voters (%)')
     fig.update_traces(textposition='inside', textinfo='percent+label')
     st.plotly_chart(fig, use_container_width=True)
+
+    # Age Distribution
+    st.subheader("Voter Age Distribution")
+    age_data = get_age_distribution()
+    
+    # Bar chart for age distribution
+    age_chart = alt.Chart(age_data).mark_bar().encode(
+        x=alt.X('age_group:O', title='Age Group'),
+        y=alt.Y('count:Q', title='Number of Votes'),
+        color=alt.Color('count:Q', scale=alt.Scale(scheme='blues')),
+        tooltip=['age_group', 'count', 'percentage']
+    ).properties(height=300)
+    
+    st.altair_chart(age_chart, use_container_width=True)
+
+    # State-level Analysis
+    st.subheader("State-level Voting Analysis")
+    state_data = get_state_details()
+    
+    # State selector
+    selected_state = st.selectbox(
+        "Select a state to view details",
+        options=sorted(state_data['address_state'].unique())
+    )
+    
+    # Filter data for selected state
+    state_filtered = state_data[state_data['address_state'] == selected_state]
+    
+    # Create three columns for metrics
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        total_voters = state_filtered['total_voters'].iloc[0]
+        st.metric("Total Voters", f"{total_voters:,}")
+        
+    with col2:
+        avg_age = state_filtered['avg_age'].iloc[0]
+        st.metric("Average Age", f"{avg_age:.1f}")
+        
+    with col3:
+        male_pct = state_filtered['male_percentage'].iloc[0]
+        st.metric("Male/Female Ratio", f"{male_pct:.1f}% / {100-male_pct:.1f}%")
+
+    # Party distribution for selected state
+    party_chart = alt.Chart(state_filtered).mark_bar().encode(
+        x=alt.X('party:N', title='Party'),
+        y=alt.Y('vote_count:Q', title='Votes'),
+        color=alt.Color('party:N', scale=alt.Scale(domain=list(PARTY_COLORS.keys()),
+                                                  range=list(PARTY_COLORS.values()))),
+        tooltip=['party', 'vote_count', 'percentage']
+    ).properties(height=300)
+    
+    st.altair_chart(party_chart, use_container_width=True)
+
+    # Create expandable details section
+    with st.expander("View Detailed State Statistics"):
+        st.dataframe(
+            state_filtered[['party', 'vote_count', 'percentage']]
+            .sort_values('vote_count', ascending=False)
+        )
 
     # Candidate information
     st.subheader('Candidate Information')
