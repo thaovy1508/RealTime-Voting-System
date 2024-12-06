@@ -6,6 +6,7 @@ import altair as alt
 from datetime import datetime
 import time
 from streamlit_autorefresh import st_autorefresh
+import geopandas as gpd
 
 # Set page config
 st.set_page_config(
@@ -134,6 +135,20 @@ def get_active_locations():
     conn.close()
     return active_states
 
+
+def get_gender_division():
+    conn = connect_to_db()
+    query = """
+    SELECT v.gender, COUNT(*) as vote_count,
+           ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM vote), 2) as percentage
+    FROM vote vt
+    JOIN voter v ON vt.voter_id = v.voter_id
+    GROUP BY v.gender
+    """
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return df
+
 def main():
     st.title('🗳️ Real-time Voting Dashboard')
     st.write("Live voting results updated every 5 seconds")
@@ -231,6 +246,36 @@ def main():
     )
     
     st.altair_chart(trends_chart, use_container_width=True)
+
+    st.subheader('Vote Distribution by State')
+    votes_by_state = get_active_locations()
+    
+    # Load US states shapefile
+    us_states = gpd.read_file('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
+    
+    # Merge votes data with US states shapefile
+    merged_data = us_states.merge(votes_by_state, left_on='name', right_on='address_state', how='left')
+    
+    # Create choropleth map
+    fig = px.choropleth(merged_data, 
+                        geojson=merged_data.geometry, 
+                        locations=merged_data.index, 
+                        color='vote_count',
+                        color_continuous_scale="Viridis",
+                        hover_name="name",
+                        hover_data=["party", "vote_count"])
+
+    fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_layout(height=600, margin={"r":0,"t":0,"l":0,"b":0})
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Gender division of voters
+    st.subheader('Gender Division of Voters')
+    gender_data = get_gender_division()
+    
+    fig = px.pie(gender_data, values='percentage', names='gender', title='Gender Division of Voters (%)')
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+    st.plotly_chart(fig, use_container_width=True)
 
     # Candidate information
     st.subheader('Candidate Information')
