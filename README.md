@@ -229,7 +229,7 @@ CREATE TABLE candidate (
 ```
 ### **2. data_generator.py**
 This file generates data from RandomUser API as voting simulator, and inserts the data to the database accordingly.
-
+![Data Generator](images/data-generator.png)
 **Key Features:**
 
 Data Generation
@@ -258,7 +258,105 @@ SELECT * FROM VOTE;
 ```
 ![Vote_DB](images/vote_db.png)
 
-### **3. analytics.py**
+### **3. app.py**
+This file using Streamlit to create web-page dashboard.
+```bash
+# Open another anaconda prompt
+# Make sure your conda environment is activated
+conda activate voting-system
 
-### **4. dashboard.py**
+# Run the dashboard
+streamlit run app.py
+
+```
 ## Dashboard Components
+### 1. Real-time Metrics
+- **Total Votes Cast**: Real-time counter of all votes with hourly change indicator
+- **Leading Candidate**: Current leader with party affiliation, vote count, and percentage
+- **Active States**: Number of states currently participating in voting
+- **Last Updated**: Timestamp of most recent data update
+![Real Time Metrics](images/real-time-metrics.png)
+
+### 2. Vote Distribution Visualizations
+- **Party Distribution Donut Chart**
+  - Interactive pie chart showing vote share by party
+  - Color-coded segments with hover details
+  - Percentage labels for each party
+  
+
+- **Candidate Performance Bar Chart**
+  - Horizontal bar chart of votes by candidate
+  - Color-coded by party affiliation
+  - Vote counts and percentages displayed
+
+![Vote Distibution](images/vote-distribution-visualizations.png)
+### 3. Temporal Analysis
+- **Voting Trends Over Time**
+  - Line chart showing cumulative votes
+  - Party-wise vote progression
+  - Interactive tooltips with detailed information
+  - 30-second auto-refresh functionality
+![Voting Trends](images/voting-trends.png)
+
+### 4. Geographical Visualization
+- **Total Votes by State Map**
+  - Choropleth map of the United States
+  - Color intensity indicating vote density
+  - Hover tooltips with state-specific data
+
+- **Leading Party by State Map**
+  - Color-coded map showing dominant party
+  - Party-specific legends
+  - Interactive state-wise details
+![Geographical Visualization](images/geographical-visualization.png)
+
+### 5. Demographic Analysis
+- **Gender Distribution**
+  - Donut chart showing voter gender ratio
+  - Percentage breakdowns
+  - Color-coded visualization
+
+- **Age Distribution**
+  - Bar chart of voter age groups
+  - Percentage labels for each group
+  - Age group categories: 18-29, 30-44, 45-59, 60+
+![Demographic Analysis](images/demographic-analysis.png)
+
+### 6. Detailed Data Tables
+- **State-Level Voting Details**
+  - Searchable state-wise voting data
+  - Party-wise vote counts
+  - Demographic information
+  - Interactive sorting and filtering
+![State Data Table](images/state-detailed-data-table.png)
+
+### 7. Candidate Information
+- **Candidate Profiles**
+  - Expandable sections for each candidate
+  - Profile images
+  - Biographical information
+  - Party affiliation
+  - Age and gender details
+![Candidate Information](images/candidate-info.png)
+
+### 8. Download Options
+- CSV data export functionality
+- PDF dashboard report generation
+![Download Panel](images/download-options.png)
+
+### 9. Control Features
+- Time range selection
+- Auto-refresh every 30 seconds
+- Search functionality for state data
+- Interactive filters and tooltips
+
+## Data Updates
+- Real-time data updates every 30 seconds
+- Timestamp display for last update
+- Visual indicators for data changes
+
+## Responsive Design
+- Fluid layout adapting to screen sizes
+- Organized grid system for components
+- Optimized visualization spacing
+- Mobile-friendly interface
