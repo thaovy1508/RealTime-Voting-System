@@ -6,6 +6,7 @@ import psycopg2
 from confluent_kafka import SerializingProducer
 import json
 import uuid
+from datetime import datetime, timedelta
 
 class ContinuousVoteSimulator:
     BASE_URL = 'https://randomuser.me/api/?nat=us'
@@ -77,15 +78,16 @@ class ContinuousVoteSimulator:
         
         if response.status_code == 200:
             user_data = response.json()['results'][0]
+            age = random.randint(32,60)
             return {
                 "candidate_id": user_data['login']['uuid'],
                 "first_name": user_data['name']['first'],
                 "last_name": user_data['name']['last'],
-                "dob": user_data['dob']['date'],
-                "age": int(user_data['registered']['age']),
+                "dob": (datetime.now() - timedelta(days=age*365)).strftime("%Y-%m-%d"),
+                "age": age,
                 "gender": gender,
                 "party": self.PARTIES[candidate_number % len(self.PARTIES)],
-                "biography": f"Experienced leader with {random.randint(5, 20)} years in public service.",
+                "biography": (f"{random.choice(['Bachelor', 'Master', 'J.D.', 'Ph.D.'])} degree in {random.choice(['Political Science', 'Law', 'Economics', 'International Relations', 'Public Policy'])} from {random.choice(['Harvard University', 'Stanford University', 'Yale University', 'University of Chicago', 'Princeton University'])}. With {random.randint(7, 20)} years of experience in public service, including roles as {', '.join(random.sample(['State Senator', 'Governor', 'U.S. Representative', 'U.S. Senator', 'Mayor of a major city', 'Secretary of State', 'Vice President'], 2))}. Has demonstrated strong leadership and commitment to national progress. Key achievements include: {', '.join(random.sample(['Passed landmark legislation on healthcare reform', 'Led economic recovery efforts during recession', 'Championed environmental protection initiatives', 'Negotiated crucial international trade agreements', 'Implemented comprehensive education reform', 'Known for bipartisan approach and ability to unite diverse groups.'], 3))}. Committed to economic growth, social justice, and strengthening America's global position."),
                 "img_url": user_data['picture']['large']
             }
         else:
@@ -105,12 +107,13 @@ class ContinuousVoteSimulator:
         
         if response.status_code == 200:
             user_data = response.json()['results'][0]
+            age = random.randint(18,60)
             voter = {
                 "voter_id": user_data['login']['uuid'],
                 "first_name": user_data['name']['first'],
                 "last_name": user_data['name']['last'],
-                "dob": user_data['dob']['date'],
-                "age": int(user_data['registered']['age']),
+                "dob": (datetime.now() - timedelta(days=age*365)).strftime("%Y-%m-%d"),
+                "age": age,
                 "gender": user_data['gender'],
                 "nationality": user_data['nat'],
                 "registration_number": user_data['login']['username'],
@@ -261,7 +264,7 @@ class ContinuousVoteSimulator:
 
     
 
-    def simulate_continuously(self, voter_interval=0.5, stats_interval=10):
+    def simulate_continuously(self, voter_interval=0.01, stats_interval=10):
         """Run continuous simulation of voter registration and voting"""
         print("Starting continuous simulation...")
         print(f"- Generating new voter every {voter_interval} seconds")
@@ -316,7 +319,7 @@ if __name__ == "__main__":
     
     try:
         # Start continuous simulation
-        simulator.simulate_continuously(voter_interval=0.5, stats_interval=10)
+        simulator.simulate_continuously(voter_interval=0.01, stats_interval=10)
         
     except Exception as e:
         print(f"Error during simulation: {e}")
