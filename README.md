@@ -341,6 +341,7 @@ This file using Streamlit to create web-page dashboard.
 ### 8. Download Options
 - CSV data export functionality
 - PDF dashboard report generation
+
 ![Download Panel](images/download-options.png)
 
 ### 9. Control Features
@@ -349,12 +350,12 @@ This file using Streamlit to create web-page dashboard.
 - Search functionality for state data
 - Interactive filters and tooltips
 
-## Data Updates
+#### Data Updates
 - Real-time data updates every 30 seconds
 - Timestamp display for last update
 - Visual indicators for data changes
 
-## Responsive Design
+#### Responsive Design
 - Fluid layout adapting to screen sizes
 - Organized grid system for components
 - Optimized visualization spacing
