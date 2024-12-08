@@ -164,9 +164,16 @@ python src/data_generator.py
 
 # This file will generate data indefinitely, to stop the process press "Ctrl-C"
 ```
-**6. Run analytics**
+**6. Run Streamlit Dashboard**
+```bash
+# Open another anaconda prompt
+# Make sure your conda environment is activated
+conda activate voting-system
 
-**7. Run Streamlit Dashboard**
+# Run the dashboard
+streamlit run app.py
+
+```
 
 ## Component Descriptions
 ### **1. setup_database.py**
@@ -260,15 +267,7 @@ SELECT * FROM VOTE;
 
 ### **3. app.py**
 This file using Streamlit to create web-page dashboard.
-```bash
-# Open another anaconda prompt
-# Make sure your conda environment is activated
-conda activate voting-system
 
-# Run the dashboard
-streamlit run app.py
-
-```
 ## Dashboard Components
 ### 1. Real-time Metrics
 - **Total Votes Cast**: Real-time counter of all votes with hourly change indicator
