@@ -344,6 +344,9 @@ This file using Streamlit to create web-page dashboard.
 
 ![Download Panel](images/download-options.png)
 
+- Sample PDF file: [example pdf](https://github.com/thaovy1508/RealTime-Voting-System/blob/main/docs/pdf-sample.pdf)
+- Sample CSV file: [example csv](https://github.com/thaovy1508/RealTime-Voting-System/blob/main/docs/csv-sample.csv)
+
 ### 9. Control Features
 - Time range selection
 - Auto-refresh every 30 seconds
