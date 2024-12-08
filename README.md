@@ -71,11 +71,12 @@ The project consists of three main components:
 Voting-Dashboard/
 ├── docs/
 ├── images/
-├── lib/
 ├── src/
-│   ├── dashboard.py      # Streamlit dashboard
+│   ├── data_generator.py
+│   ├── setup_database.py
+├── app.py      # Streamlit dashboard
 ├── docker-compose.yml
-├── requirements.txt
+├── environment.yml
 └── README.md
 ```
 ## Getting Started (Using Docker & Anaconda)
